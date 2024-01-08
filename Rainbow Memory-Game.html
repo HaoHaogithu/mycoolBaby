@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>翻</title>
+  <style>
+  body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0fff3;
+  }
+
+  .card2{
+      width: 60px;
+    height: 60px;
+    border-radius:5px;
+    perspective: 1000px;
+    position: relative;
+    margin:2px;
+  }
+
+  .card {
+    width: 120px;
+    height: 120px;
+    border-radius:5px;
+    perspective: 1000px;
+    position: relative;
+    cursor: pointer;
+    transition: index 2s;
+    transition:transform 2s;
+    backface-visibility:hidden;
+    margin:2px;
+  }
+
+  .card:hover {
+    
+      border:1px solid orange;
+      margin:1px;
+
+  }
+
+  .card .face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .front {
+      background-color: #ff0000; /* 红色 */
+      transform: rotateY(0deg);
+      frontface-visibility:hidden;
+     
+  }
+
+  .back {
+      background-color: #ffffff; /* 白色 */
+      transform: rotateY(0deg);
+      backface-visibility:hidden;
+      
+  }
+
+  #time{
+      width:80px;
+      height:40px;
+      margin-top:20px;
+      border:1px solid #000;
+      border-radius:5px;
+      display:block;
+      position:fixed;
+      top:20px;
+      left:20px;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      line-height:40px;
+      font-size:25px;
+
+
+
+ #game {
+            width: 400px;
+            height: 300px;
+            background-color: lightgray;
+            position: relative; /* 确保弹框能够正常定位 */
+        }
+
+ .popup {
+            display: none; /* 初始状态隐藏弹框 */
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); /* 居中定位 */
+            padding: 20px;
+            border: 1px solid black;
+            background-color: white;
+            z-index: 9999; /* 提高z-index值以便于覆盖页面 */
+        }
+
+      
+
+
+    
+
+  }
+  </style>
+</head>
+  <body>
+
+
+
+<div id="game">
+        <!-- 这里是游戏区域 -->
+    </div>
+
+
+
+
+
+
+    
+
+    <div id='time'>0</div>
+    <button type='submit' id='btn1' value='' style="position:fixed;top:100px;left:40px">开始</buttom>
+<script>
+
+ function showPopup() {
+            var popup = document.createElement("div"); // 创建弹框元素
+            popup.className = "popup";
+            
+     var textNode = document.createTextNode("恭喜！您已经获得了胜利！您的成绩是"); // 创建文本节点
+     popup.appendChild(textNode); // 将文本节点添加到弹框中
+ 
+  
+ 
+            
+            document.getElementById("game").appendChild(popup); // 将弹框添加到游戏区域中
+            
+         /*   setTimeout(() => {
+                popup.remove(); // 两秒后移除弹框
+            }, 3000);*/
+        }
+      
+
+  
+  //创建计时器
+      var boxObj = document.querySelector('#time');
+      var startObj = document.querySelector('#btn1');
+      var num = boxObj.innerHTML;
+      var times = '';
+      var begin = 0;
+  var num0 = 0;
+      
+      startObj.onclick=function (){
+	  var num1 = 0;
+	  var j,k='';
+	  begin=1;
+	  
+	  times = setInterval(function() {
+	      num1++;
+	      if(num0==0){
+	      if(num1>=60){
+		  j=num1/60;
+		  j=Math.trunc(j);
+		  k=num1%60;
+		  num3=j+"'"+k+"''";
+		  boxObj.innerHTML = num3;
+	      }
+	      else{
+		  num2=num1+"''";
+		  boxObj.innerText = num2;
+	      }
+	      }
+	      
+	  },1000);
+			    
+      }
+
+  //创建卡牌库以及排放行列
+  document.addEventListener("DOMContentLoaded", function () {
+      const colors = [ "#ffff00","#ff8800",]; // 黄、橘
+    const grid = document.createElement("div");
+    grid.style.display = "grid";
+    grid.style.gridTemplateColumns = "repeat(2, 1fr)";
+    grid.style.gridTemplateRows = "repeat(3, 1fr)";
+    document.body.appendChild(grid);
+
+        // 创建卡片函数
+    function createCard(color) {
+    const card = document.createElement("div");
+    card.classList.add("card");
+
+    const front = document.createElement("div");
+    front.classList.add("face", "front");
+    front.style.backgroundColor = color;
+
+    const back = document.createElement("div");
+    back.classList.add("face", "back");
+
+    card.appendChild(front);
+    card.appendChild(back);
+
+    return card;
+    }
+
+    // 创建卡片（共i组所有颜色，i应取偶数
+    for (let i = 0; i < 2; i++) {
+    for (let color of colors) {
+      const card = createCard(color);
+      grid.appendChild(card);
+    }
+    }
+      //创建展示卡片
+      const grid2 = document.createElement('div');
+      grid2.style.display = 'grid';
+       grid2.style.gridTemplateColumns = "repeat(3, 1fr)";
+    grid2.style.gridTemplateRows = "repeat(3, 1fr)";
+      document.body.appendChild(grid2);
+
+      function createCardShowing(color){
+	  const card2 = document.createElement('div');
+	  card2.classList.add("card2");
+	  card2.style.backgroundColor = color;
+	  
+	  return card2;
+      }
+      for(let i=0;i<1;i++){
+	  for(let color of colors){
+	      const card2 = createCardShowing(color);
+	      grid2.appendChild(card2);
+	  }
+      }
+      
+    // 洗牌算法
+    function shuffle(array) {
+    let currentIndex = array.length, randomIndex;
+
+    while (currentIndex !== 0) {
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+    }
+
+    // 洗牌
+    const cards = Array.from(document.querySelectorAll(".card"));
+    shuffle(cards);
+
+    // 添加卡片到页面
+    cards.forEach(card => grid.appendChild(card));
+
+      
+    // 翻转卡片
+    function flipCard(card) {
+	card.style.transform = "rotateY(180deg)";
+	card.style.transition="transform 1s";
+	
+    }
+      function flipCard2(card){
+	  card.style.transform="rotateY(360deg)";
+	  card.style.transition="transform 1s";
+      }
+    // 监听卡片点击事件
+    let flippedCards = [];
+    let isFlipping = false;
+
+      cards.forEach(card => {
+	  card.addEventListener("click", function () {
+	      if(begin===1){
+	      
+      if (isFlipping) return;
+
+      flipCard(card);
+
+      flippedCards.push(card);
+
+      if (flippedCards.length === 2) {
+      isFlipping = true;
+      setTimeout(() => checkMatch(), 600);
+      }
+	  }
+    });
+	  
+    });
+
+        // 检查匹配
+    function checkMatch() {
+    const [card1, card2] = flippedCards;
+
+    const color1 = card1.querySelector(".front").style.backgroundColor;
+    const color2 = card2.querySelector(".front").style.backgroundColor;
+
+    if (color1 === color2) {
+      // 匹配成功
+      flippedCards = [];
+      isFlipping = false;
+  
+      // 检查是否所有卡片都已经翻转
+	if (cards.every(card => card.style.transform === "rotateY(180deg)")) {
+	    num0 = 1 ;
+	  alert("恭喜，你胜利了！你的成绩是num3");
+	  showPopup();
+	 
+      }
+	
+    } else {
+      // 匹配失败，翻转回去
+      setTimeout(() => {
+      flipCard2(card1);
+      flipCard2(card2);
+      flippedCards = [];
+      isFlipping = false;
+      }, 50);
+    }
+    }
+  });
+  </script>
+</body>
+</html>
